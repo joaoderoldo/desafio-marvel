@@ -1,4 +1,4 @@
-# Desafio Lecom
+# Desafio Marvel + React
 
 O Desafio era construir uma aplicação web em react utilizando a API da Marvel.
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Navbar extends React.Component{
     render(){
@@ -8,7 +9,9 @@ export default class Navbar extends React.Component{
                     Marvel <span>React</span>
                 </div>
                 <div className={"content-menu"}>
-                    <a href="/" className={"link"}>Home</a>
+                    <Link to={'/'} className={"link"}>
+                        Home
+                    </Link>
                 </div>
             </nav>
         );

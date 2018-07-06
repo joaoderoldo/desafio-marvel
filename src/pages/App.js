@@ -1,31 +1,56 @@
 import React from 'react';
+import md5 from 'js-md5'
 
-import MarvelContainer from '../components/MarvelContainer';
+import Card from '../components/Card';
+import Navbar from '../components/Navbar';
 
-const dados = {
-    card1: {
-        estilo: {backgroundImage: "url(https://i.annihil.us/u/prod/marvel/i/mg/f/d0/5a79bd467fabf/detail.jpg)"},
-        data: "01/03/1993",
-        categoria: "Marvel Universe",
-        titulo: "IRON MAN (1968) #290",
-        descricao: "Tony Stark returns from the dead! Morgan Stark makes his move for control of Stark Enterprises! And no sooner is Tony back in command of his new suit of armor then he's attacked on all sides by weapon-wielding warriors! (Originally published as IRON MAN (1993) #290)",
-        autor: "Len Kaminski",
-        link: "/detalhes/1",
-    },
-    
-    card2: {
-        estilo: {backgroundImage: "url(https://i.annihil.us/u/prod/marvel/i/mg/9/d0/57ed2d6239a8d/detail.jpg)"},
-        data: "06/13/2012",
-        categoria: "Marvel Universe",
-        titulo: "AMAZING SPIDER-MAN (1999) #687",
-        descricao: "ENDS OF THE PART SIX. Doctor Octopus has a new Sinister Six: the Avengers! Can Spider-Man sacrifice one life to save the entire planet?",
-        autor: "Dan Slott",
-        link: "/detalhes/2",
-    },
-};
 
 export default class App extends React.Component{
-    render(){
-        return <MarvelContainer {...dados} />;
+    constructor() {
+        super();
+        this.state = {
+            dados: null
+        };
+    }
+
+    componentDidMount() {
+        this.getDados();
+    }
+
+    getDados() {
+        const PUBLIC_KEY = 'ccca70f60e79cc9cfe739c029a6c3466';
+        const PRIVATE_KEY = 'c4d7c99bf89f4b8e02470afda7d3aa9affa1f26c';
+        const API_URL = 'https://gateway.marvel.com/v1/public/';
+        const PARAMETERS = 'comics?format=digital%20comic&formatType=comic&orderBy=focDate&limit=20';
+
+        const hash = md5.create()
+        const timestamp = Number(new Date());
+
+        hash.update(timestamp + PRIVATE_KEY + PUBLIC_KEY);
+
+        fetch(`${API_URL}${PARAMETERS}&ts=${timestamp}&apikey=${PUBLIC_KEY}&hash=${hash.hex()}`, {
+            method: "GET"
+        }).then(res => res.json())
+        .then(json => {
+            this.setState({
+                dados: json.data
+            });
+          });
+    }
+
+    render() {
+        if (!this.state.dados)
+            return <div className={"loader"}>Carregando...</div>;
+        
+        return(
+            <div className={"main"}>
+                <Navbar />
+                <section className={"cards"}>
+                    {this.state.dados.results.map((item, index) => 
+                        <Card key={Math.random()} item={item} />
+                    )}
+                </section>
+            </div>
+        );
     }
 }

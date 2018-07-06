@@ -10,8 +10,11 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
     "js-md5": "^0.7.3",
+    "moment": "^2.22.2",
+    "prop-types": "^15.6.2",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
+    "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
